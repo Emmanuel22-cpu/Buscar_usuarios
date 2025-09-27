@@ -1,7 +1,7 @@
 export default function Card({ usuario, onClick }) {
   return (
     <div
-      className="p-4 bg-white shadow-md rounded hover:scale-105 transition-transform duration-300 cursor-pointer"
+      className="p-4 bg-blue-200 shadow-md rounded hover:scale-105 transition-transform duration-300 cursor-pointer"
       onClick={onClick} // ← ¡aquí!
     >
       <img
