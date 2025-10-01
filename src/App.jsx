@@ -3,24 +3,30 @@ import axios from "axios"
 import Card from "./componentes/card"
 import SearchInput from "./componentes/SearchInput"
 import Loader from "./componentes/Loader"
-import { AnimatePresence, motion } from "framer-motion";
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer} from "react-toastify"
+import { AnimatePresence, motion } from "framer-motion"
+import { useAuth } from "./context/AuthContext"
 
 export default function App() {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [usuarios, setUsuarios] = useState([]);  
   const [filtrados, setFiltrados] = useState([]);
-  const [loading, setLoading] = useState(false); // 👈 nuevo estado
+  const [loading, setLoading] = useState(false); 
+
+
+  const { logout } = useAuth()
 
   const obtenerUsuarios = async () => {
     try {
-      setLoading(true); // 👈 empieza carga
+      setLoading(true);   
       const response = await axios.get("http://localhost:4000/usuarios");
       setUsuarios(response.data);
       setFiltrados(response.data);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
     } finally {
-      setLoading(false); // 👈 termina carga
+      setLoading(false); 
     }
   };
 
@@ -30,14 +36,13 @@ export default function App() {
 
   const filtrarUsuarios = useCallback(
     (query) => {
-      setLoading(true); // 👈 loader mientras filtra
+      setLoading(true); //  loader mientras filtra
       const q = query.trim().toLowerCase();
       const resultados = usuarios.filter((usuario) =>
         [usuario.nombre, usuario.perfil, usuario.intereses, usuario.email].some((campo) =>
           String(campo).toLowerCase().includes(q)
         )
       );
-      // pequeño delay opcional para que se note el loader
       setTimeout(() => {
         setFiltrados(resultados);
         setLoading(false);
